@@ -282,7 +282,7 @@ class Server(object):
             '-R',
             self.Ip()])
 
-    # Noway is so close to doing SSH decently, but doesn't.
+    # Scaleway is so close to doing SSH decently, but doesn't.
     # Per https://github.com/scaleway/image-tools/issues/36 they have
     # implemented a side channel to fetch ssh key fingerprints through https.
     # However the scripts that runs on their VM to publish the finger print is
