@@ -56,7 +56,7 @@ class InternalError(Error):
 
 
 class ShellScriptError(Error):
-    def __init__(self, out, err)
+    def __init__(self, out, err):
         self.out = out
         self.err = err
 
