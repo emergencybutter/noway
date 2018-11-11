@@ -2,3 +2,4 @@
 *.py-e
 __pycache__
 token.json
+/*.egg-info

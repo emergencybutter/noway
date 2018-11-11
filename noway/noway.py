@@ -1,14 +1,14 @@
-"""A module for manipulating http://scaleway.com VMs.
+"""A module for manipulating scaleway VMs.
 
 Example usage:
 Once, to generate and save tokens:
-    authenticator = scaleway.Authenticator()
+    authenticator = noway.Authenticator()
     authenticator.Update()
 
 As many times at you'd like
-    authenticator = scaleway.Authenticator()
+    authenticator = noway.Authenticator()
     authenticator.Load()
-    zc = scaleway.ZoneConnection(authenticator, scaleway.AMS_URL)
+    zc = noway.ZoneConnection(authenticator, noway.AMS_URL)
     zc.Connect()
     server = zc.CreateServer('t0', '9cec5666-d87c-4f2b-8176-19f25e752362')
     server.PowerOn()
@@ -245,9 +245,9 @@ class Server(object):
     def State(self):
         return self.descriptor['state']
 
-    @retry(stop_max_attempt_number=50,
+    @retry(stop_max_attempt_number=100,
            wait_exponential_multiplier=500,
-           wait_exponential_max=10000,
+           wait_exponential_max=5*60000,
            retry_on_exception=_IsInvalidState)
     def WaitForState(self, state):
         self.Refresh()
@@ -257,7 +257,7 @@ class Server(object):
                 current_state, state))
             raise InvalidState
 
-    @retry(stop_max_attempt_number=50,
+    @retry(stop_max_attempt_number=100,
            wait_exponential_multiplier=500,
            wait_exponential_max=10000,
            retry_on_exception=_IsConnectionRefusedError)
@@ -367,15 +367,7 @@ class ZoneConnection(object):
 
     @retry(stop_max_attempt_number=50,
            wait_exponential_multiplier=500,
-           wait_exponential_max=10000,
+           wait_exponential_max=5*60000,
            retry_on_exception=_IsHTTPError)
     def WaitForServer(self, server_id):
-        while True:
-            try:
-                self.GetServer(server_id)
-            except urllib.error.HTTPError as e:
-                if e.code == 404:
-                    time.sleep(1)
-                    continue
-                raise
-            break
+        self.GetServer(server_id)
