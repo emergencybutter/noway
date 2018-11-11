@@ -56,8 +56,9 @@ class InternalError(Error):
 
 
 class ShellScriptError(Error):
-    pass
-
+    def __init__(self, out, err)
+        self.out = out
+        self.err = err
 
 def _IsRemoteDisconnected(x):
     return isinstance(x, http.client.RemoteDisconnected)
@@ -80,7 +81,9 @@ def RunLocal(cmd):
                                        stdout=subprocess.PIPE,
                                        stderr=subprocess.PIPE)
     if completed_process.returncode != 0:
-        raise ShellScriptError()
+        raise ShellScriptError(
+                completed_process.stdout,
+                completed_process.stderr)
     return (completed_process.stdout, completed_process.stderr)
 
 
